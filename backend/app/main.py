@@ -9,6 +9,7 @@ from pathlib import Path
 import httpx
 from fastapi import FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
@@ -938,3 +939,21 @@ def clear_cache(request: Request) -> dict[str, int]:
     if cache is None:
         return {"cleared_entries": 0}
     return {"cleared_entries": cache.clear()}
+
+
+STATIC_DIR = Path(os.getenv("LUNARPATH_STATIC_DIR", str(BACKEND_DIR.parent / "frontend" / "dist"))).resolve()
+if STATIC_DIR.is_dir():
+    @app.get("/{full_path:path}", include_in_schema=False)
+    def serve_frontend(full_path: str) -> Response:
+        if full_path == "api" or full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="Not found")
+        candidate = (STATIC_DIR / full_path).resolve()
+        if candidate.is_relative_to(STATIC_DIR):
+            if candidate.is_file():
+                return FileResponse(candidate)
+            if candidate.is_dir() and (candidate / "index.html").is_file():
+                return FileResponse(candidate / "index.html")
+        index = STATIC_DIR / "index.html"
+        if index.is_file():
+            return FileResponse(index)
+        raise HTTPException(status_code=404, detail="Not found")
