@@ -1,0 +1,101 @@
+.education-view { position: relative; display: flex; flex-direction: column; height: 100%; overflow: hidden; color: #e9eef4; background: #04060c; }
+
+.education-backdrop { position: fixed; inset: 0; z-index: 0; isolation: isolate; overflow: hidden; pointer-events: none; background: #04060c; }
+/* CSS starfield is only the fallback; the WebGL scene draws catalogued stars once ready. */
+.education-backdrop::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; opacity: .55; transition: opacity .8s ease;
+  background:
+    radial-gradient(circle at 17px 29px, #dce8ffce 0 0.7px, transparent 1.3px) 0 0 / 113px 127px,
+    radial-gradient(circle at 52px 37px, #ffe9d099 0 0.5px, transparent 1.1px) 0 0 / 83px 71px,
+    radial-gradient(circle at 22px 33px, #afc6ea66 0 0.6px, transparent 1.2px) 0 0 / 59px 97px;
+}
+/* Keeps the copy on the left legible over the lit limb. */
+.education-backdrop::after {
+  content: ''; position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(90deg, #04060cf0 0%, #04060cb8 30%, #04060c00 60%), linear-gradient(0deg, #04060ce6 0%, #04060c00 34%);
+}
+.education-backdrop:has(.education-moon-canvas.is-ready)::before { opacity: 0; }
+
+.education-moon {
+  position: absolute; top: 50%; left: 70%; transform: translate(-50%, -50%); z-index: 1;
+  width: min(118vh, 1100px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 70% 40%, transparent 0 38%, #04060cee 72%), url('/lroc_wac_south_pole.png') center / cover;
+}
+/* The static mosaic is only shown when WebGL or the textures fail. */
+.education-backdrop:not(:has(.education-moon-canvas.is-failed)) .education-moon { visibility: hidden; }
+.education-moon-canvas {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;
+  width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s cubic-bezier(.2, .7, .2, 1);
+}
+.education-moon-canvas.is-ready { opacity: 1; }
+.education-moon-canvas canvas { display: block; width: 100%; height: 100%; }
+.education-vitrine-caption { position: absolute; z-index: 3; right: clamp(22px, 5vw, 70px); bottom: clamp(10px, 2vh, 18px); color: #8193ad; font-size: 11px; }
+
+.education-hero {
+  position: relative; z-index: 1; flex: 1 1 auto; min-height: 0; display: grid; align-items: center;
+  padding: clamp(18px, 4vh, 48px) clamp(22px, 5vw, 70px);
+}
+.education-intro { max-width: 40rem; }
+.education-view .education-intro h1 {
+  font-size: clamp(40px, 5.6vw, 92px); line-height: .98; letter-spacing: -.04em; font-weight: 600;
+  margin: 0 0 clamp(14px, 2.4vh, 26px); color: #f4f6fb; text-wrap: balance;
+}
+.education-view .education-intro h1 em { font-style: normal; color: #9fc0ff; }
+.education-intro > p { color: #b9c5d8; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.6; max-width: 34rem; text-wrap: pretty; }
+
+.education-cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: clamp(18px, 3vh, 34px); }
+.education-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  border: 0; border-radius: 10px; background: #f4f6fb; color: #0b1324;
+  font-size: 15px; font-weight: 700; padding: 14px 22px;
+  transition: background .2s ease, transform .2s cubic-bezier(.2, .7, .2, 1);
+}
+.education-cta svg { transition: transform .25s cubic-bezier(.2, .7, .2, 1); }
+.education-cta:hover { background: #ffffff; }
+.education-cta:hover svg { transform: translateX(3px); }
+.education-cta:active { transform: scale(.98); }
+.education-cta:focus-visible { outline: 2px solid #9fc0ff; outline-offset: 3px; }
+.education-highlights { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: clamp(14px, 2.4vh, 26px); color: #8d9db6; font-size: 13px; }
+
+.education-steps { position: relative; z-index: 1; flex: none; padding: 0 clamp(22px, 5vw, 70px) clamp(12px, 2vh, 22px); }
+.education-view .education-steps h2 { font-size: clamp(17px, 1.5vw, 22px); letter-spacing: -.02em; margin: 0 0 4px; color: #f4f6fb; }
+.education-steps > p { display: none; }
+.education-step-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: clamp(10px, 1.6vh, 16px); }
+.education-step-grid article {
+  display: flex; align-items: center; gap: 12px;
+  background: #0a1120e6; border: 1px solid #1a2740; border-radius: 12px; padding: clamp(11px, 1.6vh, 16px);
+}
+.education-step-icon { flex: none; display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: #9fc0ff; background: #13203a; }
+.education-step-icon.gold { color: #f0c27a; background: #2a2214; }
+.education-step-tag { display: block; color: #8193ad; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+.education-step-grid h3 { font-size: 14px; margin: 2px 0 0; color: #eef2f8; }
+.education-step-grid p { display: none; }
+
+.education-source { position: relative; z-index: 1; flex: none; max-width: min(60rem, 50vw); padding: 0 clamp(22px, 5vw, 70px) clamp(10px, 1.8vh, 16px); color: #7d8ea8; font-size: 11px; line-height: 1.5; }
+
+::selection { background: #9fc0ff55; }
+html:has(.home-shell) { background: #04060c; }
+
+@media (max-width: 900px), (max-height: 560px) {
+  .education-view { height: auto; overflow: visible; }
+  .education-backdrop { position: absolute; inset: 0 0 auto; height: 100svh; }
+  .education-backdrop::after { background: linear-gradient(180deg, #04060c00 0%, #04060c00 22%, #04060cd9 52%, #04060c 78%); }
+  .education-moon { left: 50%; top: 24%; width: min(92vw, 560px); }
+  .education-hero { padding-top: min(52vw, 340px); }
+  .education-step-grid { grid-template-columns: 1fr; }
+  .education-steps > p, .education-step-grid p { display: block; }
+  .education-step-grid p { margin: 4px 0 0; color: #a3b1c6; font-size: 13px; line-height: 1.5; }
+  .education-step-grid article { align-items: flex-start; }
+  .education-source { max-width: none; }
+  /* The source line below already credits NASA LRO/LOLA; the full caption would sit over the Moon here. */
+  .education-vitrine-caption { display: none; }
+  .education-step-grid article { display: grid; grid-template-columns: 34px minmax(0, 1fr); column-gap: 12px; align-items: start; }
+  .education-step-grid article > :not(.education-step-icon) { grid-column: 2; }
+  .education-step-icon { grid-row: 1 / span 3; }
+}
+@media (max-width: 500px) {
+  .education-cta-row { flex-direction: column; align-items: stretch; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .education-moon-canvas, .education-backdrop::before, .education-cta, .education-cta svg { transition: none; }
+}

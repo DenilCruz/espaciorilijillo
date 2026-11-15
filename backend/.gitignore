@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+.env
+data/*.img
+data/*.part
+data/kernels/*.bsp
+data/kernels/*.bpc
+data/nac_cache/
+data/*.sqlite-shm
+data/*.sqlite-wal
